@@ -1,0 +1,41 @@
+body {
+  margin: 50px;
+  background-color: black;
+  color: white;
+}
+
+a:link, a:visited, a:hover, a:active {
+  text-decoration: none;
+  color: white;
+}
+
+title {
+  margin: 50px;
+}
+
+.button-list {
+  list-style-type: none; /* Removes bullet points */
+  padding: 0;
+  margin: 0;
+}
+
+.button-list li a {
+  display: block; /* Makes the entire link area clickable, filling the LI */
+  padding: 10px 15px; /* Adds space inside the button */
+  background-color: #007bff; /* Sets a background color */
+  color: white; /* Sets the text color */
+  text-decoration: none; /* Removes the default underline from links */
+  border-radius: 4px; /* Rounds the corners for a button look */
+  text-align: center; /* Centers the text */
+  margin-bottom: 5px; /* Adds a small gap between buttons */
+  cursor: pointer; /* Ensures the cursor indicates a clickable item */
+  transition: background-color 0.3s; /* Smooth transition for hover effect */
+}
+
+.button-list li a:hover {
+  background-color: #0056b3; /* Changes color on hover */
+}
+
+.button-list li a:active {
+  transform: translateY(1px); /* Gives a "depressed" button effect on click */
+}
