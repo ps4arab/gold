@@ -6,8 +6,6 @@ const MAP_SHARED = 0x1, MAP_PRIVATE_ANON = 0x1002;
 
 const DEFAULT_KEXP = "kexp_2026_05_25.bin";
 const DEFAULT_ELFLDR = "elfldr-ps5-1360.elf";
-const DEFAULT_ELFLDR = "kstuff.elf";
-const DEFAULT_ELFLDR = "etaHEN-2.5B.elf";
 
 const SHELLCODE = {
   size: 18912,
