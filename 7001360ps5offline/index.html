@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" manifest="cache.manifest">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <title>PS4AR - 7.00 to 13.60 - Offline Cache | PS5 Relapse</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { min-height: 100%; margin: 0; }
+    body {
+      min-height: 100vh;
+      padding: 28px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at 50% 42%, #355c4d 0, #182b27 42%, #0b1114 100%);
+      color: #d8dee9;
+      font: 16px/1.45 Consolas, "DejaVu Sans Mono", monospace;
+    }
+    main { width: min(100%, 720px); text-align: center; }
+    #cat {
+      display: block;
+      width: 150px;
+      height: 150px;
+      max-width: 34vw;
+      max-height: 34vw;
+      margin: 0 auto 12px;
+      border: 4px solid #52647c;
+      border-radius: 18px;
+      object-fit: cover;
+      box-shadow: 0 24px 70px rgba(0, 0, 0, .45);
+    }
+    h1 { margin: 0; color: #eceff4; font-size: 30px; font-weight: 600; }
+    .sub { margin: 2px 0 18px; color: #9aa8b8; font-size: 15px; }
+    #cache-status {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 7px 12px;
+      margin-bottom: 12px;
+      padding: 10px 12px;
+      border: 1px solid #344258;
+      border-radius: 6px;
+      background: rgba(12, 18, 28, .72);
+      color: #b8c4d2;
+      font-size: 13px;
+      text-align: left;
+    }
+    #cache-status[data-state="success"] { border-color: #49795f; color: #a5d6b2; }
+    #cache-status[data-state="error"] { border-color: #8b4b50; color: #f0a3a3; }
+    #cache-progress {
+      grid-column: 1 / -1;
+      width: 100%;
+      height: 8px;
+      border: 0;
+      border-radius: 4px;
+      background: #1d2a32;
+      accent-color: #79c79a;
+    }
+    #cache-progress::-webkit-progress-bar { border-radius: 4px; background: #1d2a32; }
+    #cache-progress::-webkit-progress-value { border-radius: 4px; background: #79c79a; }
+    #cache-status[data-state="error"] #cache-progress::-webkit-progress-value { background: #dd7777; }
+    #console {
+      width: 100%;
+      min-height: 150px;
+      max-height: min(52vh, 420px);
+      overflow: auto;
+      padding: 14px 16px;
+      border: 1px solid #344258;
+      border-radius: 8px;
+      background: rgba(12, 18, 28, .9);
+      box-shadow: 0 18px 42px rgba(0, 0, 0, .3), inset 0 1px rgba(255, 255, 255, .04);
+      color: #b8c4d2;
+      text-align: left;
+      overflow-wrap: anywhere;
+    }
+    #console > div { padding: 3px 0; }
+    @media (max-width: 480px) {
+      body { padding: 20px 14px; }
+      #cat { width: 112px; height: 112px; }
+      #console { min-height: 130px; padding: 12px; font-size: 14px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <img id="cat" src="./mmhmm-cats-ps5.gif" alt="">
+    <h1>PS4AR</h1>
+    <p class="sub">PS5 Relapse</p>
+    <div id="cache-status" data-state="checking" role="status" aria-live="polite">
+      <span id="cache-label">Checking cache...</span>
+      <span id="cache-count">Waiting</span>
+      <progress id="cache-progress" max="1" value="0" aria-label="Cache download progress"></progress>
+    </div>
+    <div id="console" role="log" aria-live="polite"></div>
+  </main>
+  <script>
+    (() => {
+      const status = document.getElementById("cache-status");
+      const label = document.getElementById("cache-label");
+      const count = document.getElementById("cache-count");
+      const progress = document.getElementById("cache-progress");
+      const cache = window.applicationCache;
+
+      function showState(text, state) {
+        label.textContent = text;
+        status.dataset.state = state;
+      }
+
+      if (!cache) {
+        showState("Offline cache is not supported", "error");
+      } else {
+        cache.addEventListener("checking", () => showState("Checking cache...", "checking"));
+        cache.addEventListener("downloading", () => {
+          count.textContent = "0 / ? resources";
+          progress.value = 0;
+          showState("Downloading cache...", "downloading");
+        });
+        cache.addEventListener("progress", (event) => {
+          const total = event.total || 0;
+          count.textContent = `${event.loaded} / ${total || "?"} resources`;
+          if (total) progress.value = event.loaded / total;
+          showState("Downloading cache...", "downloading");
+        });
+        cache.addEventListener("cached", () => {
+          progress.value = 1;
+          showState("Cache downloaded successfully", "success");
+          if (count.textContent === "Waiting") count.textContent = "Ready";
+        });
+        cache.addEventListener("noupdate", () => {
+          progress.value = 1;
+          count.textContent = "Up to date";
+          showState("Cache is ready", "success");
+        });
+        cache.addEventListener("updateready", () => {
+          progress.value = 1;
+          showState("Cache update downloaded successfully", "success");
+        });
+        cache.addEventListener("error", () => showState("Cache download failed", "error"));
+        cache.addEventListener("obsolete", () => showState("Cache manifest is unavailable", "error"));
+
+        if (cache.status === cache.IDLE) {
+          progress.value = 1;
+          count.textContent = "Ready";
+          showState("Cache is ready", "success");
+        } else if (cache.status === cache.UPDATEREADY) {
+          progress.value = 1;
+          showState("Cache update downloaded successfully", "success");
+        } else if (cache.status === cache.OBSOLETE) {
+          showState("Cache manifest is unavailable", "error");
+        } else if (cache.status === cache.DOWNLOADING) {
+          showState("Downloading cache...", "downloading");
+        }
+      }
+    })();
+  </script>
+  <script src="./src/firmware.js"></script>
+  <script src="./src/main.js"></script>
+  <script src="./src/rop.js"></script>
+  <script src="./src/utils/syscalls.js"></script>
+  <script type="module" src="./src/site.js"></script>
+</body>
+</html>
