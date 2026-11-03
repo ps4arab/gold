@@ -1,0 +1,21 @@
+{
+  "name": "PS4AR",
+  "version": 1,
+  "packages": [
+    {
+      "titleId": "PPSA11002",
+      "title": "Post Trauma",
+      "downloadLinks": [
+        {
+          "name": "USA Base (v01.04) - Direct",
+          "url": "https://akirabox.com/download/e1.z-n6SYFrPghHd9MKQ3DvHldxqKpYbtaG3fljM-dLqVKbzjBr04103ox0UhonYlsnIt-KXssA_l0Uv3TqF5L_sWBFuoV6wYbK3XnSzXvll7xOpDGPU_qqcs2oxIZSEgq_N9_QOaxTvvE7lQzozyq3-ehnQgSfTE2iF5xSHc2gxDSFXCA0znAKzL6ksRAE54XAeKSPX_xLPFNNoAjJavqjTU3Z8we4-W6Y7tVp8pe1v5U4XE_1oqIRoZrKX-XAyvPjPjO8ubwMGtDsMoxEGsqTBe_w_2aTHWGt4twOrDhaX7mHPE1__hJIOx40zhFMGS0eTh3dkJBIKdXKgyDLHUER0Hpg2hoKWb2yK3wkLEY93NHScDAH/PPSA11002.exfat"
+        }
+      ],
+      "category": "game",
+      "posterUrl": "https://dlpsgame.com/wp-content/uploads/2026/05/6.jpg",
+      "version": "02.00",
+      "description": "Region: EUR\nVersion: 02.00\nMin FW: 4.00\nSize: 16.71 GB",
+      "downloadSource": "https://akirabox.com/download/e1.z-n6SYFrPghHd9MKQ3DvHldxqKpYbtaG3fljM-dLqVKbzjBr04103ox0UhonYlsnIt-KXssA_l0Uv3TqF5L_sWBFuoV6wYbK3XnSzXvll7xOpDGPU_qqcs2oxIZSEgq_N9_QOaxTvvE7lQzozyq3-ehnQgSfTE2iF5xSHc2gxDSFXCA0znAKzL6ksRAE54XAeKSPX_xLPFNNoAjJavqjTU3Z8we4-W6Y7tVp8pe1v5U4XE_1oqIRoZrKX-XAyvPjPjO8ubwMGtDsMoxEGsqTBe_w_2aTHWGt4twOrDhaX7mHPE1__hJIOx40zhFMGS0eTh3dkJBIKdXKgyDLHUER0Hpg2hoKWb2yK3wkLEY93NHScDAH/PPSA11002.exfat"
+    }
+  ]
+}
