@@ -13,9 +13,24 @@
       ],
       "category": "game",
       "posterUrl": "https://dlpsgame.com/wp-content/uploads/2026/05/6.jpg",
-      "version": "02.00",
-      "description": "Region: EUR\nVersion: 02.00\nMin FW: 4.00\nSize: 16.71 GB",
+      "version": "01.04",
+      "description": "Region: EUR\nVersion: 01.04\nMin FW: 4.00\nSize: 16.71 GB",
       "downloadSource": "https://akirabox.com/download/e1.z-n6SYFrPghHd9MKQ3DvHldxqKpYbtaG3fljM-dLqVKbzjBr04103ox0UhonYlsnIt-KXssA_l0Uv3TqF5L_sWBFuoV6wYbK3XnSzXvll7xOpDGPU_qqcs2oxIZSEgq_N9_QOaxTvvE7lQzozyq3-ehnQgSfTE2iF5xSHc2gxDSFXCA0znAKzL6ksRAE54XAeKSPX_xLPFNNoAjJavqjTU3Z8we4-W6Y7tVp8pe1v5U4XE_1oqIRoZrKX-XAyvPjPjO8ubwMGtDsMoxEGsqTBe_w_2aTHWGt4twOrDhaX7mHPE1__hJIOx40zhFMGS0eTh3dkJBIKdXKgyDLHUER0Hpg2hoKWb2yK3wkLEY93NHScDAH/PPSA11002.exfat"
+    }
+    {
+      "titleId": "PPSA03073",
+      "title": "eFootball 2027",
+      "downloadLinks": [
+        {
+          "name": "EUR Base (v06.00) - Direct",
+          "url": "https://akirabox.com/download/e1.kl3IZT1Gd8glYF6Oi268R7bPPTW_tELdOvoZ-zP-oYQFh6MRttKEkeSmdRXVTLOeL_eHy60F1Jss1OB2BkVGH7ji0p4z_aQZ1CyIlSd3g0DKXpc08MK_UPQjGFrquZ30ZA1kQraN15q4LMbCm0hsdYN3R9mPVmyDn4gnHpZfFheYvt4KlYMvRMH71KS2iO8HWI2fnuXLuXF1ac9Ew04yLgHeKZHC_xcqG11gz54IoEc8NXS-t_3OTKn5VZoHhv0jVM_NXTIjDbLXmYUT6xxIyV5964h-9wURwSXiYiKrEMLLacGiKcXIC2JzAohbrtiJlIfV-NGQeVRP0cFevZ4YLB6kEnp7ZBqRBdHHFysPBA/PPSA03073.7z"
+        }
+      ],
+      "category": "game",
+      "posterUrl": "https://dlpsgame.com/wp-content/uploads/2026/05/6.jpg",
+      "version": "06.00",
+      "description": "Region: EUR\nVersion: 06.00\nMin FW: 3.00\nSize: 42.16 GB",
+      "downloadSource": "https://akirabox.com/download/e1.kl3IZT1Gd8glYF6Oi268R7bPPTW_tELdOvoZ-zP-oYQFh6MRttKEkeSmdRXVTLOeL_eHy60F1Jss1OB2BkVGH7ji0p4z_aQZ1CyIlSd3g0DKXpc08MK_UPQjGFrquZ30ZA1kQraN15q4LMbCm0hsdYN3R9mPVmyDn4gnHpZfFheYvt4KlYMvRMH71KS2iO8HWI2fnuXLuXF1ac9Ew04yLgHeKZHC_xcqG11gz54IoEc8NXS-t_3OTKn5VZoHhv0jVM_NXTIjDbLXmYUT6xxIyV5964h-9wURwSXiYiKrEMLLacGiKcXIC2JzAohbrtiJlIfV-NGQeVRP0cFevZ4YLB6kEnp7ZBqRBdHHFysPBA/PPSA03073.7z"
     }
   ]
 }
