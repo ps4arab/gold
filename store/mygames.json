@@ -68,14 +68,14 @@
       "downloadLinks": [
         {
           "name": "EUR Base (v01.00) - Direct",
-          "url": "https://datanodes.to/jsoe04avnkaq"
+          "url": "https://datanodes.to/jsoe04avnkaq/Donkey_Kong_Bananza_Switch_2_NSP_BASE_GAME.rar"
         }
       ],
       "category": "game",
       "posterUrl": "https://e.snmc.io/lk/lv/x/c0fff37dddc6618b9f75f5312d6bc674/13471911",
       "version": "01.00",
       "description": "Region: EUR\nVersion: 01.00\nMin FW: 1.00\nSize: 08.00 GB",
-      "downloadSource": "https://datanodes.to/jsoe04avnkaq"
+      "downloadSource": "https://datanodes.to/jsoe04avnkaq/Donkey_Kong_Bananza_Switch_2_NSP_BASE_GAME.rar"
     },
     {
       "titleId": "BANZ00000",
@@ -83,14 +83,14 @@
       "downloadLinks": [
         {
           "name": "EUR Update (v02.10) - Direct",
-          "url": "https://datanodes.to/r3acpcvksywy"
+          "url": "https://datanodes.to/r3acpcvksywy/Donkey_Kong_Bananza_Switch_2_NSP_Update_2.1.11.rar"
         }
       ],
       "category": "update",
       "posterUrl": "https://e.snmc.io/lk/lv/x/c0fff37dddc6618b9f75f5312d6bc674/13471911",
       "version": "02.10",
       "description": "Region: EUR\nVersion: 02.10\nMin FW: 1.00\nSize: 08.00 GB",
-      "downloadSource": "https://datanodes.to/r3acpcvksywy"
+      "downloadSource": "https://datanodes.to/r3acpcvksywy/Donkey_Kong_Bananza_Switch_2_NSP_Update_2.1.11.rar"
     },
     {
       "titleId": "BANZ00000",
@@ -98,14 +98,14 @@
       "downloadLinks": [
         {
           "name": "EUR Dlc (v02.10) - Direct",
-          "url": "https://datanodes.to/ewx6d7mxema2"
+          "url": "https://datanodes.to/ewx6d7mxema2/Donkey_Kong_Bananza_Switch_2_NSP_DLC.rar"
         }
       ],
       "category": "dlc",
       "posterUrl": "https://e.snmc.io/lk/lv/x/c0fff37dddc6618b9f75f5312d6bc674/13471911",
       "version": "02.10",
       "description": "Region: EUR\nVersion: 02.10\nMin FW: 1.00\nSize: 700.00 MB",
-      "downloadSource": "https://datanodes.to/ewx6d7mxema2"
+      "downloadSource": "https://datanodes.to/ewx6d7mxema2/Donkey_Kong_Bananza_Switch_2_NSP_DLC.rar"
     }
   ]
 }
