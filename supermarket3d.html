@@ -1,284 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D PlayStation Game Supermarket</title>
-    <style>
-        body {
-            margin: 0;
-            overflow: hidden;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #111;
-            user-select: none;
-        }
-        #crosshair {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 8px;
-            height: 8px;
-            background: rgba(255, 255, 255, 0.8);
-            border: 2px solid #0070d1;
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            pointer-events: none;
-            z-index: 10;
-        }
-        #ui-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background: rgba(0, 15, 40, 0.85);
-            color: white;
-            z-index: 20;
-            text-align: center;
-        }
-        #ui-overlay h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            letter-spacing: 2px;
-            color: #4da6ff;
-        }
-        #ui-overlay p {
-            font-size: 1.1rem;
-            max-width: 500px;
-            line-height: 1.6;
-            color: #ddd;
-        }
-        .btn {
-            margin-top: 20px;
-            padding: 12px 30px;
-            font-size: 1.2rem;
-            background: #0070d1;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .btn:hover { background: #005bb5; }
-        
-        #hud {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            color: white;
-            background: rgba(0, 0, 0, 0.6);
-            padding: 12px 18px;
-            border-radius: 8px;
-            border-left: 4px solid #0070d1;
-            font-size: 0.9rem;
-            pointer-events: none;
-            z-index: 10;
-        }
-        #inspect-hud {
-            display: none;
-            position: absolute;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: white;
-            background: rgba(0, 112, 209, 0.9);
-            padding: 12px 25px;
-            border-radius: 30px;
-            font-weight: bold;
-            letter-spacing: 1px;
-            z-index: 15;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>3D Store</title>
+  <style>
+    body { margin: 0; overflow: hidden; font-family: sans-serif; }
+    #ui {
+      position: absolute; top: 15px; left: 15px;
+      background: rgba(0, 0, 0, 0.7); color: white;
+      padding: 12px 18px; border-radius: 8px; pointer-events: none;
+    }
+    #info { font-weight: bold; color: #4ade80; margin-top: 5px; }
+  </style>
 </head>
 <body>
+  <div id="ui">
+    <div>Move: <b>W A S D</b> or <b>Arrow Keys</b> | Click a box to select</div>
+    <div id="info">Selected: None</div>
+  </div>
 
-    <div id="crosshair"></div>
+  <!-- Load Three.js -->
+  <script src="https://cloudflare.com"></script>
+  <script>
+    // 1. Scene, Camera, Renderer
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x1e293b);
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.set(0, 1.5, 6);
 
-    <div id="ui-overlay">
-        <h1>PLAYSTATION SUPERMARKET 3D</h1>
-        <p>
-            <strong>Controls:</strong><br>
-            W, A, S, D = Walk &nbsp;|&nbsp; Mouse = Look Around<br>
-            Click a Game Case = Inspect &nbsp;|&nbsp; Drag Mouse = Rotate Case<br>
-            Press ESC = Pause / Unlock Mouse
-        </p>
-        <button class="btn" id="start-btn">Enter Store</button>
-    </div>
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
 
-    <div id="hud">
-        <strong>Walk:</strong> WASD &nbsp;|&nbsp; <strong>Look:</strong> Mouse &nbsp;|&nbsp; <strong>Select Game:</strong> Left Click
-    </div>
+    // 2. Lighting & Floor
+    scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+    const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    dirLight.position.set(5, 10, 7);
+    scene.add(dirLight);
 
-    <div id="inspect-hud">
-        DRAG MOUSE TO ROTATE COVER &nbsp;|&nbsp; PRESS [SPACE] OR [RIGHT CLICK] TO PUT BACK
-    </div>
+    const floor = new THREE.Mesh(
+      new THREE.PlaneGeometry(30, 50),
+      new THREE.MeshStandardMaterial({ color: 0x334155 })
+    );
+    floor.rotation.x = -Math.PI / 2;
+    scene.add(floor);
 
-    <!-- Import Three.js & PointerLockControls via ES Modules -->
-    <script type="importmap">
-        {
-            "imports": {
-                "three": "https://unpkg.com",
-                "three/addons/": "https://unpkg.com"
-            }
-        }
-    </script>
+    // 3. Create Rows of Product Boxes
+    const boxes = [];
+    const geometry = new THREE.BoxGeometry(1.2, 1.2, 1.2);
+    const colors = [0xef4444, 0x3b82f6, 0x10b981, 0xf59e0b, 0x8b5cf6];
 
-    <script type="module">
-        import * as THREE from 'three';
-        import { PointerLockControls } from 'three/addons/controls/PointerLockControls.js';
+    for (let row = 0; row < 5; row++) {
+      for (let col = -1; col <= 1; col += 2) { // Left (-1) and Right (1) aisles
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        const material = new THREE.MeshStandardMaterial({ color });
+        const box = new THREE.Mesh(geometry, material);
+        
+        box.position.set(col * 3, 0.6, -row * 4);
+        box.userData = { name: `Product #${boxes.length + 1}`, price: `$${(row + 1) * 15}` };
+        
+        scene.add(box);
+        boxes.push(box);
+      }
+    }
 
-        // --- 1. SCENE SETUP ---
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x1a1e26);
-        scene.fog = new THREE.Fog(0x1a1e26, 10, 35);
+    // 4. Keyboard Navigation
+    const keys = {};
+    window.addEventListener('keydown', (e) => keys[e.key.toLowerCase()] = true);
+    window.addEventListener('keyup', (e) => keys[e.key.toLowerCase()] = false);
 
-        const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 100);
-        camera.position.set(0, 1.7, 6); // Eye level
+    // 5. Click Detection (Raycasting)
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+    const infoDiv = document.getElementById('info');
 
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.shadowMap.enabled = true;
-        document.body.appendChild(renderer.domElement);
+    window.addEventListener('click', (event) => {
+      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
-        // --- 2. LIGHTING ---
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-        scene.add(ambientLight);
+      raycaster.setFromCamera(mouse, camera);
+      const intersects = raycaster.intersectObjects(boxes);
 
-        const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
-        dirLight.position.set(5, 10, 5);
-        dirLight.castShadow = true;
-        scene.add(dirLight);
+      if (intersects.length > 0) {
+        const clickedBox = intersects[0].object;
+        infoDiv.innerText = `Selected: ${clickedBox.userData.name} (${clickedBox.userData.price})`;
+        clickedBox.scale.set(1.2, 1.2, 1.2); // Pop effect
+        setTimeout(() => clickedBox.scale.set(1, 1, 1), 200);
+      }
+    });
 
-        // Neon blue accent lights
-        const blueLight1 = new THREE.PointLight(0x0070d1, 5, 15);
-        blueLight1.position.set(-4, 3, 0);
-        scene.add(blueLight1);
+    // 6. Animation Loop
+    function animate() {
+      requestAnimationFrame(animate);
+      const speed = 0.12;
+      if (keys['w'] || keys['arrowup']) camera.position.z -= speed;
+      if (keys['s'] || keys['arrowdown']) camera.position.z += speed;
+      if (keys['a'] || keys['arrowleft']) camera.position.x -= speed;
+      if (keys['d'] || keys['arrowright']) camera.position.x += speed;
 
-        const blueLight2 = new THREE.PointLight(0x0070d1, 5, 15);
-        blueLight2.position.set(4, 3, 0);
-        scene.add(blueLight2);
+      renderer.render(scene, camera);
+    }
+    animate();
 
-        // --- 3. SUPERMARKET ENVIRONMENT ---
-        // Floor
-        const floorGeo = new THREE.PlaneGeometry(30, 30);
-        const floorMat = new THREE.MeshStandardMaterial({ color: 0x2c323d, roughness: 0.4 });
-        const floor = new THREE.Mesh(floorGeo, floorMat);
-        floor.rotation.x = -Math.PI / 2;
-        floor.receiveShadow = true;
-        scene.add(floor);
-
-        // Grid helper on floor for supermarket tile feel
-        const grid = new THREE.GridHelper(30, 30, 0x0070d1, 0x3a414f);
-        grid.position.y = 0.01;
-        scene.add(grid);
-
-        // Walls
-        const wallMat = new THREE.MeshStandardMaterial({ color: 0x1e242b });
-        const backWall = new THREE.Mesh(new THREE.BoxGeometry(30, 6, 0.5), wallMat);
-        backWall.position.set(0, 3, -10);
-        scene.add(backWall);
-
-        // --- 4. DYNAMIC PS5 GAME COVER GENERATOR ---
-        // Generates realistic front, spine, and back textures using HTML5 Canvas
-        function createGameCoverMaterials(title, subtitle, primaryColor, accentColor, rating) {
-            // FRONT COVER
-            const frontCanvas = document.createElement('canvas');
-            frontCanvas.width = 512; frontCanvas.height = 640;
-            const fCtx = frontCanvas.getContext('2d');
-
-            // Cover Art Background Gradient
-            const grad = fCtx.createLinearGradient(0, 0, 512, 640);
-            grad.addColorStop(0, primaryColor);
-            grad.addColorStop(1, accentColor);
-            fCtx.fillStyle = grad;
-            fCtx.fillRect(0, 0, 512, 640);
-
-            // PS5 White Top Banner
-            fCtx.fillStyle = '#ffffff';
-            fCtx.fillRect(0, 0, 512, 65);
-            fCtx.fillStyle = '#000000';
-            fCtx.font = 'bold 34px Arial';
-            fCtx.fillText('PS5', 25, 45);
-            
-            // Blue line under banner
-            fCtx.fillStyle = '#0070d1';
-            fCtx.fillRect(0, 65, 512, 8);
-
-            // Game Title Artwork
-            fCtx.fillStyle = '#ffffff';
-            fCtx.shadowColor = 'rgba(0,0,0,0.8)';
-            fCtx.shadowBlur = 15;
-            fCtx.font = 'bold 46px Impact, Arial';
-            fCtx.textAlign = 'center';
-            fCtx.fillText(title.toUpperCase(), 256, 360);
-
-            fCtx.font = '22px Arial';
-            fCtx.fillText(subtitle, 256, 400);
-
-            // Age Rating Box
-            fCtx.shadowBlur = 0;
-            fCtx.fillStyle = '#ffffff';
-            fCtx.fillRect(25, 540, 60, 75);
-            fCtx.fillStyle = '#000000';
-            fCtx.font = 'bold 28px Arial';
-            fCtx.fillText(rating, 55, 588);
-
-            // BACK COVER
-            const backCanvas = document.createElement('canvas');
-            backCanvas.width = 512; backCanvas.height = 640;
-            const bCtx = backCanvas.getContext('2d');
-            bCtx.fillStyle = '#141820';
-            bCtx.fillRect(0, 0, 512, 640);
-            
-            // Back Top Banner
-            bCtx.fillStyle = '#0070d1';
-            bCtx.fillRect(0, 0, 512, 50);
-            bCtx.fillStyle = '#ffffff';
-            bCtx.font = 'bold 22px Arial';
-            bCtx.fillText('PLAY HAS NO LIMITS™', 20, 33);
-
-            // Description Text
-            bCtx.font = 'bold 26px Arial';
-            bCtx.fillText(title, 30, 100);
-            bCtx.font = '18px Arial';
-            bCtx.fillStyle = '#cccccc';
-            bCtx.fillText('• Experience next-gen 4K 60FPS gameplay', 30, 150);
-            bCtx.fillText('• DualSense™ Haptic Feedback supported', 30, 185);
-            bCtx.fillText('• Ultra-high speed SSD loading', 30, 220);
-            bCtx.fillText('• 1-2 Players | Network Features', 30, 255);
-
-            // Fake Screenshots on back
-            bCtx.fillStyle = primaryColor;
-            bCtx.fillRect(30, 290, 210, 120);
-            bCtx.fillStyle = accentColor;
-            bCtx.fillRect(260, 290, 210, 120);
-
-            // Barcode
-            bCtx.fillStyle = '#ffffff';
-            bCtx.fillRect(350, 540, 130, 70);
-            bCtx.fillStyle = '#000000';
-            bCtx.font = '14px monospace';
-            bCtx.fillText('||||||||| || |||||', 360, 580);
-
-            // SPINE
-            const spineCanvas = document.createElement('canvas');
-            spineCanvas.width = 64; spineCanvas.height = 640;
-            const sCtx = spineCanvas.getContext('2d');
-            sCtx.fillStyle = '#0070d1';
-            sCtx.fillRect(0, 0, 64, 640);
-            sCtx.fillStyle = '#ffffff';
-            sCtx.fillRect(0, 0, 64, 65);
-            sCtx.fillStyle = '#000000';
-            sCtx.font = 'bold 20px Arial';
-            sCtx.fillText('PS5', 12, 42);
-
-            sCtx.save();
-            sCtx.translate(32, 340);
-            sCtx.rotate(Math.PI / 2);
-            sCtx.fillStyle = '#ffffff';
-            sCtx.font = 'bold 24px Arial';
+    // Handle Window Resize
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+  </script>
+</body>
+</html>
