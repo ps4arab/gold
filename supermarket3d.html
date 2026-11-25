@@ -1,113 +1,237 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>3D Store</title>
+<html><head><meta charset="UTF-8"><title>3D Store</title><style>
+body{margin:0;overflow:hidden;background:#cbd5e1;font:13px sans-serif;user-select:none}
+#ui{position:fixed;top:10px;left:10px;background:#fffd;padding:8px 12px;border-radius:8px;z-index:9}
+#vp{width:100vw;height:100vh;perspective:700px;display:flex;justify-content:center;align-items:center}
+#cam,#w,.b,.d{transform-style:preserve-3d;position:relative}
+#fl{position:absolute;width:1200px;height:1600px;left:-600px;top:-800px;transform:translateY(120px) rotateX(90deg);background:radial-gradient(#fff8,#64748b66),}
+.wl{position:absolute;border:1px solid #94a3b8;background:linear-gradient(#cbd5e1,#f8fafc 15%,#e2e8f0 88%,#334155 90%)}
+#l{width:1600px;height:460px;left:-800px;top:-340px;transform:translateX(-600px) rotateY(90deg)}
+#r{width:1600px;height:460px;left:-800px;top:-340px;transform:translateX(600px) rotateY(-90deg)}
+#f{width:1200px;height:460px;left:-600px;top:-340px;transform:translateZ(-800px)}
+#k{width:1200px;height:460px;left:-600px;top:-340px;transform:translateZ(800px) rotateY(180deg)}
+.df{position:absolute;width:150px;height:270px;left:-75px;top:-150px;border:8px solid #451a03;background:#0f172a}
+.d{width:100%;height:100%;background:linear-gradient(#78350f,#451a03);transform-origin:left;transition:.5s;cursor:pointer}
+.sg{position:absolute;top:-34px;left:35px;padding:2px 14px;color:#fff;font-weight:900;border:2px solid #fff;border-radius:4px}
+.wd{position:absolute;border:10px solid #451a03;background:repeating-linear-gradient(90deg,#451a0322 0 3px,transparent 3px 14px),#854d0e}
+.b{position:absolute;width:77px;height:105px;left:-38.5px;top:-52.5px;text-decoration:none;display:block;transition:.25s}
+.fc{position:absolute;inset:0;box-sizing:border-box;border:1px solid #0005}
+.fr{transform:translateZ(7px);display:flex;flex-direction:column;justify-content:space-between;color:#fff;overflow:hidden}
+.fr img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-1}
+.bk{transform:rotateY(180deg) translateZ(7px);background:white;color:#cbd5e1;padding:6px;font-size:7px}
+.sd{width:14px;left:31.5px;transform:rotateY(-90deg) translateZ(38.5px);writing-mode:vertical-rl;text-align:center;color:grey;font-size:7px}
+.sr{width:14px;left:31.5px;transform:rotateY(90deg) translateZ(38.5px);background:#0f172a}
+.tp{height:14px;top:45.5px;transform:rotateX(90deg) translateZ(52.5px);background:#334155}
+.bt{height:14px;top:45.5px;transform:rotateX(-90deg) translateZ(52.5px);background:#0f172a}
+</style>
   <style>
-    body { margin: 0; overflow: hidden; font-family: sans-serif; }
-    #ui {
-      position: absolute; top: 15px; left: 15px;
-      background: rgba(0, 0, 0, 0.7); color: white;
-      padding: 12px 18px; border-radius: 8px; pointer-events: none;
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      background-color: #1e1e2e;
+      color: #cdd6f4;
     }
-    #info { font-weight: bold; color: #4ade80; margin-top: 5px; }
+
+
+#status-display {
+	margin: 10px;
+	padding: 10px;
+}
+
+button {
+	margin: 5px;
+	padding: 5px;
+	font-size: 11px;
+}
+	
+.top-bar-layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #111111;
+  color: #ffffff;
+}
+
+.bottom-bar-layer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #111111;
+  color: #ffffff;
+}
+
+.page-content {
+  padding-top: 48px; /* Prevents the fixed bar from covering top content */
+}
   </style>
-</head>
-<body>
-  <div id="ui">
-    <div>Move: <b>W A S D</b> or <b>Arrow Keys</b> | Click a box to select</div>
-    <div id="info">Selected: None</div>
-  </div>
+</head><body>
 
-  <!-- Load Three.js -->
-  <script src="https://cloudflare.com"></script>
+<header class="top-bar-layer">
+  <span>Click W,A,S,D or Arrows: Move | Space/Shift: Up/Down | Drag/Q,E,R,F: Look<br>Or Click any of the 32 unique games
+</span>
+</header>
+
+
+  
+<div id="vp"><div id="cam"><div id="w">
+<div id="fl"></div><div id="l" class="wl"></div><div id="r" class="wl"></div><div id="f" class="wl"></div><div id="k" class="wl"></div>
+<div class="df" style="transform:translateZ(-798px)"><a href="supermarket3room2.html"><div class="sg" style="background:#16a34a">EXIT</div><div id="ex" class="d"></div></a></div>
+<div class="df" style="transform:translateZ(798px) rotateY(180deg)"><div class="sg" style="background:#2563eb">ENTER</div><div class="d"></div></div>
+</div></div></div><script>
+const c=document.getElementById('cam'),w=document.getElementById('w'),i=document.getElementById('in'),
+// 100 Unique Cases: [Title, Platform, BannerCSS, SpineColor, Price, ImageURL, LinkHref]
+G=[
+["control resonant 2026" ,"PS5" ,"#fff;color:#00439c" ,"white" ,69 ,"https://love-games1.net/_ld/218/46590801.jpg?control_resonant_2026_pc_1_0_portable " ,"https://love-games1.net/load/0-0-0-21810-20"] ,
+["pragmata 2026 " ,"PS5" ,"#fff;color:#00439c" ,"white" ,69 ," https://love-games1.net/_ld/218/46294781.jpg?pragmata_2026_pc_22357085_2_dlc_portable " ,"https://love-games1.net/load/0-0-0-21806-20"] ,
+["resident evil requiem 2026" ,"PS5" ,"#fff;color:#00439c" ,"white" ,69 ,"https://love-games1.net/_ld/218/92581394.jpg?resident_evil_requiem_2026_pc_22277314_2_dlc_portable " ,"https://love-games1.net/load/0-0-0-21805-20"] ,
+["ved recure 2026" ,"PS5" ,"#fff;color:#00439c" ,"white" ,69 ," https://love-games1.net/_ld/217/06840517.jpg?ved_recure_2026_pc_1_0 " ,"https://love-games1.net/load/0-0-0-21797-20"] ,
+["sunken realms 2026 " ,"PS5" ,"#fff;color:#00439c" ,"white" ,69 ," https://love-games1.net/_ld/217/02111437.jpg?sunken_realms_2026_pc_repack " ,"https://love-games1.net/load/0-0-0-21795-20"] ,
+["assassins creed mirage 2023" ,"PS5" ,"#fff;color:#00439c" ,"white" ,69 ,"https://love-games1.net/_ld/217/18013999.jpg?assassin_39_s_creed_mirage_2023_pc_1_1_1_portable " ,"https://love-games1.net/load/0-0-0-21769-20"] ,
+["dune awakening 2025" ,"PS5" ,"#fff;color:#00439c" ,"white" ,69 ,"https://love-games1.net/_ld/217/37589867.jpg?dune_awakening_2025_pc_1_5_3_0_2111270_portable " ,"https://love-games1.net/load/0-0-0-21748-20"] ,
+["grand theft auto san andreas 2005 " ,"PS5" ,"#fff;color:#00439c" ,"white" ,69 ," https://love-games1.net/_ld/217/83414267.png?grand_theft_auto_san_andreas_2005_pc_revamped_edition_1_01_mod " ,"https://love-games1.net/load/0-0-0-21732-20"] ,
+["blackwood 2026" ,"PS5" ,"#fff;color:#00439c" ,"white" ,69 ,"https://love-games1.net/_ld/217/29895232.jpg?blackwood_2026_pc_25336981_dlc_portable " ,"https://love-games1.net/load/0-0-0-21722-20"] ,
+["fracture point 2026 " ,"PS5" ,"#fff;color:#00439c" ,"white" ,69 ," https://love-games1.net/_ld/217/64183233.jpg?fracture_point_2026_pc_25335726_portable " ,"https://love-games1.net/load/0-0-0-21713-20"] ,
+["runescape dragonwilds 2026" ,"PS5" ,"#fff;color:#00439c" ,"white" ,69 ,"https://love-games1.net/_ld/217/13178931.jpg?runescape_dragonwilds_2026_pc_1_0_2_dlc_scene " ,"https://love-games1.net/load/0-0-0-21701-20"] ,
+["x men origins wolverine" ,"PS5" ,"#fff;color:#00439c" ,"white" ,69 ,"https://love-games1.net/_ld/216/26387903.png?x_men_origins_wolverine_ljudi_iks_nachalo_rosomakha_2009_pc_repack_by_dixen18 " ,"https://love-games1.net/load/0-0-0-21693-20"] ,
+["project cobalt 2026" ,"PS5" ,"#fff;color:#00439c" ,"white" ,69 ,"https://love-games1.net/_ld/216/81674167.jpg?project_cobalt_2026_pc_repack " ,"https://love-games1.net/load/0-0-0-21692-20"] ,
+["spider man edge of time pc edition 2026 " ,"PS5" ,"#fff;color:#00439c" ,"white" ,69 ," https://love-games1.net/_ld/216/30988901.jpg?spider_man_edge_of_time_pc_edition_2026_pc_pc_port " ,"https://love-games1.net/load/0-0-0-21678-20"] ,
+["necrovision lost company 2010 " ,"PS5" ,"#fff;color:#00439c" ,"white" ,69 ," https://love-games1.net/_ld/216/21225158.jpg?necrovision_lost_company_2010_pc_1_1_gog " ,"https://love-games1.net/load/0-0-0-21671-20"] ,
+["necrovision 2009" ,"PS5" ,"#fff;color:#00439c" ,"white" ,69 ,"https://love-games1.net/_ld/216/41473307.jpg?necrovision_2009_pc_1_2_gog " ,"https://love-games1.net/load/0-0-0-21670-20"] ,
+["no mans sky 2016" ,"PS5" ,"#fff;color:#00439c" ,"white" ,69 ,"https://love-games1.net/_ld/216/98029204.jpg?no_man_39_s_sky_2016_pc_repack_v7_0_178763_cosmos_update_2_dlc_bonusnyj_saundtrek " ,"https://love-games1.net/load/0-0-0-21662-20"] ,
+["deadly premonition 2026" ,"PS5" ,"#fff;color:#00439c" ,"white" ,69 ,"https://love-games1.net/_ld/216/46593933.jpg?deadly_premonition_2026_pc_1_3_1_portable " ,"https://love-games1.net/load/0-0-0-21649-20"] ,
+["honeycomb the world beyond 2026 " ,"PS5" ,"#fff;color:#00439c" ,"white" ,69 ,"https://love-games1.net/_ld/216/47132787.jpg?honeycomb_the_world_beyond_2026_pc_repack " ,"https://love-games1.net/load/0-0-0-21648-20"] ,
+["valheim 2026 " ,"PS5" ,"#fff;color:#00439c" ,"white" ,69 ," https://love-games1.net/_ld/216/59235627.png?valheim_2026_pc_1_0_7_portable " ,"https://love-games1.net/load/0-0-0-21643-20"] ,
+["rogue blight 2026 " ,"PS5" ,"#fff;color:#00439c" ,"white" ,69 ," https://love-games1.net/_ld/216/02287888.jpg?rogue_blight_2026_pc_repack_v1_00_04_2_bonusnykh_dlc " ,"https://love-games1.net/load/0-0-0-21638-20"] ,
+["mega man star force legacy collection 2026" ,"PS5" ,"#fff;color:#00439c" ,"white" ,69 ,"https://love-games1.net/_ld/216/70921058.jpg?mega_man_star_force_legacy_collection_2026_pc_23297979_portable " ,"https://love-games1.net/load/0-0-0-21637-20"] ,
+["code vein ii 2 2026 " ,"PS5" ,"#fff;color:#00439c" ,"white" ,69 ," https://love-games1.net/_ld/216/22114272.jpg?code_vein_ii_2_2026_pc_22883694_7_dlc_portable " ,"https://love-games1.net/load/0-0-0-21635-20"] ,
+["sprawl zero 2026" ,"PS5" ,"#fff;color:#00439c" ,"white" ,69 ,"https://love-games1.net/_ld/216/48981474.png?sprawl_zero_2026_pc_25159858_1_dlc_portable " ,"https://love-games1.net/load/0-0-0-21633-20"] ,
+["the simpsons game 2026 " ,"PS5" ,"#fff;color:#00439c" ,"white" ,69 ," https://love-games1.net/_ld/216/43624607.jpg?the_simpsons_game_2026_pc_0_0_5_5_portable " ,"https://love-games1.net/load/0-0-0-21629-20"] ,
+["far cry 5 2018 " ,"PS5" ,"#fff;color:#00439c" ,"white" ,69 ," https://love-games1.net/_ld/216/58353930.jpg?far_cry_5_2018_pc_1_016_5_dlc_portable " ,"https://love-games1.net/load/0-0-0-21614-20"] ,
+["prince of persia the lost crown 2024 " ,"PS5" ,"#fff;color:#00439c" ,"white" ,69 ," https://love-games1.net/_ld/216/06412547.jpg?prince_of_persia_the_lost_crown_2024_pc_1_4_3_5_dlc_portable " ,"https://love-games1.net/load/0-0-0-21603-20"] ,
+["star wars outlaws 2024 " ,"PS5" ,"#fff;color:#00439c" ,"white" ,69 ," https://love-games1.net/_ld/216/20773745.jpg?star_wars_outlaws_2024_pc_1_7_8_dlc_portable " ,"https://love-games1.net/load/0-0-0-21602-20"] ,
+["metal gear solid v 5 the phantom pain 2015" ,"PS5" ,"#fff;color:#00439c" ,"white" ,69 ,"https://love-games1.net/_ld/215/72306424.jpg?metal_gear_solid_v_5_the_phantom_pain_2015_pc_1_15_9_dlc_portable " ,"https://love-games1.net/load/0-0-0-21594-20"] ,
+["halloween the game 2026 " ,"PS5" ,"#fff;color:#00439c" ,"white" ,69 ,"https://love-games1.net/_ld/215/39237337.jpg?halloween_the_game_2026_pc_1_0_0_63053_portable " ,"https://love-games1.net/load/0-0-0-21591-20"] ,
+["scavland 2026" ,"PS5" ,"#fff;color:#00439c" ,"white" ,69 ,"https://love-games1.net/_ld/215/21034353.jpg?scavland_2026_pc_0_5_165_portable " ,"https://love-games1.net/load/0-0-0-21587-20"] ,
+["gipervizor onimusha way of the sword 2026" ,"PS5" ,"#fff;color:#00439c" ,"white" ,69 ,"https://love-games1.net/_ld/215/93065481.jpg?gipervizor_onimusha_way_of_the_sword_2026_pc_24769601_24_dlc_portable " ,"https://love-games1.net/load/0-0-0-21586-20"] ,
+];
+let dg=0,dn=0,lx=0,ly=0,x=0,y=20,z=-480,yw=0,pt=0,K={};
+ex.onclick=()=>{if(!dg){ex.style.transform='rotateY(-75deg)';setTimeout(()=>{window.close();document.body.innerHTML='<h2 style="text-align:center;margin-top:40vh">Exited Store — <a href="" onclick="location.reload()"></a></h2>'},500)}};
+[-1,1].forEach(s=>{
+  [72,-55,-175].forEach(sy=>w.innerHTML+=`<div class="wd" style="width:95px;height:860px;left:-47px;top:-430px;transform:translate3d(${s*220}px,${sy}px,-95px) rotateX(90deg)"></div>`);
+  w.innerHTML+=`<div class="wd" style="width:860px;height:295px;left:-430px;top:-175px;transform:translate3d(${s*267}px,0,-95px) rotateY(${-s*90}deg);filter:brightness(.75)"></div>`;
+});
+G.forEach(([nm,p,br,cl,pr,img,url],idx)=>{
+  const t=Math.floor(idx/16),n=idx%16,s=n%2?1:-1,bx=s*212,by=t?-114:12,bz=240-Math.floor(n/2)*95,bs=`translate3d(${bx}px,${by}px,${bz}px) rotateY(${s*-80}deg)`,el=document.createElement('a');
+  el.className='b';el.href=url;el.draggable=false;el.style.transform=bs;
+  el.innerHTML=`<div class="fc fr" style="background:${cl}"><img src="${img}" alt="${nm}"><div style="background:${br};padding:2px 4px;font-size:7px;font-weight:bold">${p}</div><div style="background:#000c;padding:3px;font-size:7px;display:flex;justify-content:space-between"><b>${nm}</b><span style="background:#facc15;color:#000;padding:0 2px">$${pr}</span></div></div><div class="fc bk">${nm}<br><br>• 4K Ultra HD</div><div class="fc sd" style="background:${cl}">${nm}</div><div class="fc sr"></div><div class="fc tp"></div><div class="fc bt"></div>`;
+  el.onclick=e=>{if(dg)e.preventDefault();else i.innerText=`Opening: ${nm} (${url})`};
+  w.appendChild(el);
+});
+onkeydown=e=>K[e.key.toLowerCase()]=1;onkeyup=e=>K[e.key.toLowerCase()]=0;
+onmousedown=e=>{dn=1;dg=0;lx=e.clientX;ly=e.clientY};onmouseup=()=>{dn=0;setTimeout(()=>dg=0,50)};
+onmousemove=e=>{if(dn){if(Math.hypot(e.clientX-lx,e.clientY-ly)>2)dg=1;yw-=(e.clientX-lx)*.4;pt=Math.max(-55,Math.min(55,pt+(e.clientY-ly)*.35));lx=e.clientX;ly=e.clientY}};
+(function L(){
+  if(K.q)yw-=2;if(K.e)yw+=2;if(K.r)pt=Math.min(55,pt+1.5);if(K.f)pt=Math.max(-55,pt-1.5);if(K[' '])y+=5;if(K.shift)y-=5;
+  const r=yw*Math.PI/180,fx=-Math.sin(r)*7,fz=Math.cos(r)*7,rx=Math.cos(r)*7,rz=Math.sin(r)*7;
+  if(K.w||K.arrowup){x+=fx;z+=fz}if(K.s||K.arrowdown){x-=fx;z-=fz}if(K.a||K.arrowleft){x+=rx;z+=rz}if(K.d||K.arrowright){x-=rx;z-=rz}
+  x=Math.max(-480,Math.min(480,x));y=Math.max(-60,Math.min(240,y));z=Math.max(-680,Math.min(680,z));
+  c.style.transform=`translateZ(700px) rotateX(${pt}deg) rotateY(${yw}deg)`;w.style.transform=`translate3d(${x}px,${y}px,${z}px)`;requestAnimationFrame(L);
+})();
+</script>
+
+
+<footer class="bottom-bar-layer">
+  <span>
+
+      <button type="button" class="key-btn" data-key="w" data-code="KeyW" data-keycode="87">W - Move Forward ↑</button>
+      <button type="button" class="key-btn" data-key="a" data-code="KeyA" data-keycode="65">A - Move Left ←</button>
+      <button type="button" class="key-btn" data-key="s" data-code="KeyS" data-keycode="83">S - Move Backward ↓</button>
+      <button type="button" class="key-btn" data-key="d" data-code="KeyD" data-keycode="68">D - Move Right →</button>
+      <button type="button" class="key-btn" data-key="r" data-code="KeyR" data-keycode="82">R - Look Up ↑</button>
+      <button type="button" class="key-btn" data-key="q" data-code="KeyQ" data-keycode="81">Q - Look Left ←</button>
+      <button type="button" class="key-btn" data-key="f" data-code="KeyF" data-keycode="70">F - Look Down ↓</button>
+      <button type="button" class="key-btn" data-key="e" data-code="KeyE" data-keycode="69">E - Look Right →</button>
+      <button type="button" class="key-btn wide" data-key=" " data-code="Space" data-keycode="32">SPACE - Move Up ↑</button>
+	  <button type="button" class="key-btn wide" data-key="Shift" data-code="ShiftLeft" data-keycode="16">Shift - Move Down ↓</button>
+	  <br>by PS4AR ⓒ <script type="text/javascript">var year = new Date();document.write(year.getFullYear());</script>
+
+	</div>
+	
   <script>
-    // 1. Scene, Camera, Renderer
-    const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x1e293b);
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.set(0, 1.5, 6);
+    const display = document.getElementById('status-display');
+    const buttons = document.querySelectorAll('.key-btn');
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    document.body.appendChild(renderer.domElement);
+    // Function that dispatches a real browser KeyboardEvent
+    function triggerRealKeyEvent(type, button) {
+      const key = button.getAttribute('data-key');
+      const code = button.getAttribute('data-code');
+      const keyCode = Number(button.getAttribute('data-keycode'));
 
-    // 2. Lighting & Floor
-    scene.add(new THREE.AmbientLight(0xffffff, 0.6));
-    const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
-    dirLight.position.set(5, 10, 7);
-    scene.add(dirLight);
+      const event = new KeyboardEvent(type, {
+        key: key,
+        code: code,
+        keyCode: keyCode,
+        which: keyCode,
+        bubbles: true,
+        cancelable: true
+      });
 
-    const floor = new THREE.Mesh(
-      new THREE.PlaneGeometry(30, 50),
-      new THREE.MeshStandardMaterial({ color: 0x334155 })
-    );
-    floor.rotation.x = -Math.PI / 2;
-    scene.add(floor);
-
-    // 3. Create Rows of Product Boxes
-    const boxes = [];
-    const geometry = new THREE.BoxGeometry(1.2, 1.2, 1.2);
-    const colors = [0xef4444, 0x3b82f6, 0x10b981, 0xf59e0b, 0x8b5cf6];
-
-    for (let row = 0; row < 5; row++) {
-      for (let col = -1; col <= 1; col += 2) { // Left (-1) and Right (1) aisles
-        const color = colors[Math.floor(Math.random() * colors.length)];
-        const material = new THREE.MeshStandardMaterial({ color });
-        const box = new THREE.Mesh(geometry, material);
-        
-        box.position.set(col * 3, 0.6, -row * 4);
-        box.userData = { name: `Product #${boxes.length + 1}`, price: `$${(row + 1) * 15}` };
-        
-        scene.add(box);
-        boxes.push(box);
-      }
+      document.dispatchEvent(event);
     }
 
-    // 4. Keyboard Navigation
-    const keys = {};
-    window.addEventListener('keydown', (e) => keys[e.key.toLowerCase()] = true);
-    window.addEventListener('keyup', (e) => keys[e.key.toLowerCase()] = false);
+    // Bind pointerdown (press) and pointerup (release) to each on-screen button
+    buttons.forEach(button => {
+      button.addEventListener('pointerdown', (e) => {
+        e.preventDefault(); // Prevents focus stealing
+        button.classList.add('pressed');
+        triggerRealKeyEvent('keydown', button);
+      });
 
-    // 5. Click Detection (Raycasting)
-    const raycaster = new THREE.Raycaster();
-    const mouse = new THREE.Vector2();
-    const infoDiv = document.getElementById('info');
+      const releaseKey = () => {
+        if (button.classList.contains('pressed')) {
+          button.classList.remove('pressed');
+          triggerRealKeyEvent('keyup', button);
+        }
+      };
 
-    window.addEventListener('click', (event) => {
-      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
-      raycaster.setFromCamera(mouse, camera);
-      const intersects = raycaster.intersectObjects(boxes);
-
-      if (intersects.length > 0) {
-        const clickedBox = intersects[0].object;
-        infoDiv.innerText = `Selected: ${clickedBox.userData.name} (${clickedBox.userData.price})`;
-        clickedBox.scale.set(1.2, 1.2, 1.2); // Pop effect
-        setTimeout(() => clickedBox.scale.set(1, 1, 1), 200);
-      }
+      button.addEventListener('pointerup', releaseKey);
+      button.addEventListener('pointerleave', releaseKey);
+      button.addEventListener('pointercancel', releaseKey);
     });
 
-    // 6. Animation Loop
-    function animate() {
-      requestAnimationFrame(animate);
-      const speed = 0.12;
-      if (keys['w'] || keys['arrowup']) camera.position.z -= speed;
-      if (keys['s'] || keys['arrowdown']) camera.position.z += speed;
-      if (keys['a'] || keys['arrowleft']) camera.position.x -= speed;
-      if (keys['d'] || keys['arrowright']) camera.position.x += speed;
+    // Global listener: catches BOTH physical keyboard presses AND on-screen clicks!
+    document.addEventListener('keydown', (event) => {
+      const label = event.key === ' ' ? 'SPACE' : event.key.toUpperCase();
+      display.textContent = `Key Down: ${label} (code: ${event.code})`;
 
-      renderer.render(scene, camera);
-    }
-    animate();
+      const btn = document.querySelector(`.key-btn[data-code="${event.code}"]`);
+      if (btn) btn.classList.add('pressed');
+    });
 
-    // Handle Window Resize
-    window.addEventListener('resize', () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
+    document.addEventListener('keyup', (event) => {
+      const label = event.key === ' ' ? 'SPACE' : event.key.toUpperCase();
+      display.textContent = `Key Up: ${label}`;
+
+      const btn = document.querySelector(`.key-btn[data-code="${event.code}"]`);
+      if (btn) btn.classList.remove('pressed');
     });
   </script>
-</body>
-</html>
+  </span>
+</body></html>
